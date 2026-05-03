@@ -1,6 +1,8 @@
 ---
-import '../styles/global.css';
+import "../styles/global.css";
 import RaceCard from "../components/RaceCard.astro";
+import NextRaceCard from "../components/NextRaceCard.astro";
+import CalendarMonth from "../components/CalendarMonth.astro";
 
 const API_URL = import.meta.env.PUBLIC_API_URL;
 
@@ -10,13 +12,21 @@ let error: string | null = null;
 try {
   const response = await fetch(`${API_URL}/races`);
   if (!response.ok) {
-    throw new Error('Error al obtener las carreras');
+    throw new Error("Error al obtener las carreras");
   }
   const data = await response.json();
   races = data.races || [];
 } catch (e) {
-  error = e instanceof Error ? e.message : 'Error inesperado';
+  error = e instanceof Error ? e.message : "Error inesperado";
 }
+
+const ahora = new Date();
+const proximas = races.filter((r) => new Date(r.endDate) > ahora).slice(0, 4);
+const todas = races;
+
+const hoy = new Date();
+const currentMonth = hoy.getMonth();
+const currentYear = hoy.getFullYear();
 ---
 
 <!doctype html>
@@ -28,41 +38,83 @@ try {
   </head>
   <body class="bg-gray-900 min-h-screen text-white">
     <header class="bg-red-600 p-6 shadow-lg">
-      <div class="max-w-4xl mx-auto">
-        <h1 class="text-3xl font-extrabold tracking-tight">
-          🏎️ F1 Calendar
-        </h1>
+      <div class="max-w-5xl mx-auto">
+        <h1 class="text-3xl font-extrabold tracking-tight">🏎️ F1 Calendar</h1>
         <p class="text-red-100 mt-1">Temporada {new Date().getFullYear()}</p>
       </div>
     </header>
 
-    <main class="max-w-4xl mx-auto p-6">
-      {error ? (
-        <div class="bg-red-900/50 border border-red-500 text-red-200 p-4 rounded-lg">
-          <p class="font-bold">⚠️ Error</p>
-          <p>{error}</p>
-        </div>
-      ) : races.length === 0 ? (
-        <div class="text-center py-12 text-gray-400">
-          <p class="text-4xl mb-4">🏁</p>
-          <p class="text-lg">No se encontraron carreras.</p>
-          <p class="text-sm mt-2">Sincronizá tu backend con /api/races primero.</p>
-        </div>
-      ) : (
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {races.map((race) => (
-            <RaceCard
-              name={race.name}
-              country={race.country}
-              circuitName={race.circuitName}
-              startDate={race.startDate}
-              endDate={race.endDate}
-              round={race.round}
-              season={race.season}
-            />
-          ))}
-        </div>
-      )}
+    <main class="max-w-5xl mx-auto p-6">
+      {/* Próximas carreras */}
+      {
+        proximas.length > 0 && (
+          <section class="mb-12">
+            <h2 class="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <span>⏱️</span> Próximas carreras
+            </h2>
+            <div class="flex gap-4 overflow-x-auto pb-4 snap-x items-stretch">
+              {proximas.map((race) => (
+                <div class="snap-start shrink-0 w-72">
+                  <NextRaceCard
+                    name={race.name}
+                    country={race.country}
+                    circuitName={race.circuitName}
+                    startDate={race.startDate}
+                    endDate={race.endDate}
+                    round={race.round}
+                  />
+                </div>
+              ))}
+            </div>
+          </section>
+        )
+      }
+
+      {/* Calendario mensual */}
+      <section class="mb-12">
+        <h2 class="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+          <span>🗓️</span> Calendario mensual
+        </h2>
+        <CalendarMonth races={races} year={currentYear} month={currentMonth} />
+      </section>
+
+      {/* Calendario completo */}
+      <section>
+        <h2 class="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+          <span>📅</span> Calendario {new Date().getFullYear()}
+        </h2>
+
+        {
+          error ? (
+            <div class="bg-red-900/50 border border-red-500 text-red-200 p-4 rounded-lg">
+              <p class="font-bold">⚠️ Error</p>
+              <p>{error}</p>
+            </div>
+          ) : todas.length === 0 ? (
+            <div class="text-center py-12 text-gray-400">
+              <p class="text-4xl mb-4">🏁</p>
+              <p class="text-lg">No se encontraron carreras.</p>
+              <p class="text-sm mt-2">
+                Sincronizá tu backend con /api/races primero.
+              </p>
+            </div>
+          ) : (
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 auto-rows-fr">
+              {todas.map((race) => (
+                <RaceCard
+                  name={race.name}
+                  country={race.country}
+                  circuitName={race.circuitName}
+                  startDate={race.startDate}
+                  endDate={race.endDate}
+                  round={race.round}
+                  season={race.season}
+                />
+              ))}
+            </div>
+          )
+        }
+      </section>
     </main>
   </body>
 </html>
