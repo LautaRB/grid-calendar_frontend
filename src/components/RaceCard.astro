@@ -1,0 +1,38 @@
+---
+export interface Props {
+  name: string;
+  country: string;
+  circuitName: string;
+  startDate: string;
+  endDate: string;
+  round: number;
+  season: number;
+}
+
+const { name, country, circuitName, startDate, endDate, round, season } = Astro.props;
+
+// Formtaeo de fechas
+const fechaInicio = new Date(startDate).toLocaleDateString('es-AR');
+const fechaFin = new Date(endDate).toLocaleDateString('es-AR');
+---
+
+<div class="bg-gray-800 rounded-lg p-4 hover:bg-gray-750 transition-colors border border-gray-700 shadow-md">
+  <div class="flex justify-between items-start mb-3">
+    <h2 class="text-xl font-bold text-white">{name}</h2>
+    <span class="text-sm font-mono text-red-500 bg-red-500/10 px-2 py-1 rounded">R{round}</span>
+  </div>
+  <div class="space-y-2 text-sm text-gray-300">
+    <p class="flex items-center gap-2">
+      <span class="text-lg">🏁</span>
+      <span>{circuitName}</span>
+    </p>
+    <p class="flex items-center gap-2">
+      <span class="text-lg">📍</span>
+      <span>{country}</span>
+    </p>
+    <p class="flex items-center gap-2">
+      <span class="text-lg">📅</span>
+      <span>{fechaInicio} - {fechaFin}</span>
+    </p>
+  </div>
+</div>
