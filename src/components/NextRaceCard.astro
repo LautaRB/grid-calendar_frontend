@@ -1,0 +1,55 @@
+---
+export interface Props {
+  name: string;
+  country: string;
+  circuitName: string;
+  startDate: string;
+  endDate: string;
+  round: number;
+}
+
+const { name, country, circuitName, startDate, endDate, round } = Astro.props;
+
+const hoy = new Date();
+const inicio = new Date(startDate);
+const fin = new Date(endDate);
+const diffMs = inicio.getTime() - hoy.getTime();
+const diasRestantes = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+
+// Determinar estado
+let estado: string;
+let colorEstado: string;
+if (hoy > fin) {
+  estado = 'Finalizado';
+  colorEstado = 'text-gray-400';
+} else if (hoy >= inicio && hoy <= fin) {
+  estado = 'En curso';
+  colorEstado = 'text-green-400';
+} else {
+  estado = `${diasRestantes} días`;
+  colorEstado = 'text-white';
+}
+
+const fechaInicio = inicio.toLocaleDateString('es-AR', { day: 'numeric', month: 'short' });
+const fechaFin = fin.toLocaleDateString('es-AR', { day: 'numeric', month: 'short', year: 'numeric' });
+---
+
+<div class="bg-linear-to-br from-red-700 to-red-900 rounded-xl p-5 flex flex-col md:flex-row items-start md:items-center gap-4 shadow-lg border border-red-500/30 min-w-70 h-full">
+  <div class="shrink-0 text-4xl">
+    🏁
+  </div>
+  <div class="flex-1">
+    <div class="flex items-center gap-2 mb-1">
+      <span class="text-xs font-bold bg-white text-red-700 px-2 py-0.5 rounded">R{round}</span>
+      <h3 class="text-lg font-bold text-white">{name}</h3>
+    </div>
+    <p class="text-sm text-red-100">{circuitName}, {country}</p>
+    <p class="text-xs text-red-200 mt-1">{fechaInicio} – {fechaFin}</p>
+  </div>
+  <div class={`text-center bg-black/30 rounded-lg px-3 py-2 ${colorEstado}`}>
+    <p class="text-2xl font-extrabold">{estado}</p>
+    {!(hoy > fin || (hoy >= inicio && hoy <= fin)) && (
+      <p class="text-xs text-red-200">faltan</p>
+    )}
+  </div>
+</div>
