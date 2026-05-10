@@ -53,19 +53,47 @@ const currentYear = hoy.getFullYear();
     <link rel="manifest" href="/fav_icon/site.webmanifest" />
   </head>
   <body class="bg-gray-900 min-h-screen text-white">
-    <header
-      class="relative bg-linear-to-r from-red-800 from-50% to-transparent p-6 shadow-lg overflow-visible"
-    >
-      <div class="max-w-5xl mx-auto flex items-center justify-between">
-        <div>
-          <h1 class="text-3xl font-extrabold tracking-tight">Calendario F1</h1>
-          <p class="text-red-100 mt-1">Temporada {new Date().getFullYear()}</p>
+    <header>
+      <!-- ================= HEADER MÓVIL ================= -->
+      <div
+        class="relative bg-linear-to-r from-red-800 from-50% to-transparent p-4 shadow-lg overflow-visible block md:hidden"
+      >
+        <div class="flex flex-col items-center gap-3">
+          <div class="text-center translate-y-14">
+            <h1 class="text-2xl font-extrabold tracking-tight">
+              Calendario F1
+            </h1>
+            <p class="text-red-100 mt-1 text-sm">
+              Temporada {new Date().getFullYear()}
+            </p>
+          </div>
+          <img
+            src="/header/F1_car.png"
+            alt="F1 Car"
+            class="h-48 w-70 translate-y-19 drop-shadow-xl"
+          />
         </div>
-        <img
-          src="/header/F1_car.png"
-          alt="F1 Car"
-          class="absolute bottom-17.5 right-100 h-90 w-150 translate-y-1/2 drop-shadow-xl"
-        />
+      </div>
+
+      <!-- ================= HEADER ESCRITORIO ================= -->
+      <div
+        class="relative bg-linear-to-r from-red-800 from-50% to-transparent p-6 shadow-lg overflow-visible hidden md:block"
+      >
+        <div class="max-w-5xl mx-auto flex items-center justify-between">
+          <div>
+            <h1 class="text-3xl font-extrabold tracking-tight">
+              Calendario F1
+            </h1>
+            <p class="text-red-100 mt-1 text-base">
+              Temporada {new Date().getFullYear()}
+            </p>
+          </div>
+          <img
+            src="/header/F1_car.png"
+            alt="F1 Car"
+            class="absolute bottom-17.5 right-100 h-90 w-150 translate-y-1/2 drop-shadow-xl"
+          />
+        </div>
       </div>
     </header>
 
