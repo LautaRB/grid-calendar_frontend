@@ -49,13 +49,13 @@ import AuthLayout from "../layouts/AuthLayout.astro";
     <!-- Botones OAuth -->
     <div class="space-y-3">
       <a
-        href="/api/auth/google"
+        href={`${import.meta.env.PUBLIC_API_URL}/auth/google`}
         class="flex items-center justify-center gap-2 w-full bg-white text-gray-800 font-semibold py-2 rounded-lg hover:bg-gray-100 transition-colors"
       >
         <span class="text-xl">🔵</span> Google
       </a>
       <a
-        href="/api/auth/discord"
+        href={`${import.meta.env.PUBLIC_API_URL}/auth/discord`}
         class="flex items-center justify-center gap-2 w-full bg-indigo-600 text-white font-semibold py-2 rounded-lg hover:bg-indigo-700 transition-colors"
       >
         <span class="text-xl">🎮</span> Discord
