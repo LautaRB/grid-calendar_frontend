@@ -1,0 +1,25 @@
+---
+import "../styles/global.css";
+const url = new URL(Astro.request.url);
+const token = url.searchParams.get('token');
+---
+
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirigiendo...</title>
+  </head>
+  <body class="bg-gray-900 text-white flex items-center justify-center min-h-screen">
+    {token ? (
+      <script>
+        localStorage.setItem('token', '{token}');
+        window.location.href = '/';
+      </script>
+    ) : (
+      <div class="text-center">
+        <p class="text-red-400">Error: no se recibió token</p>
+        <a href="/login" class="text-red-400 underline mt-2 block">Volver al login</a>
+      </div>
+    )}
+  </body>
+</html>
